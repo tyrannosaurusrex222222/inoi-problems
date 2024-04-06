@@ -18,7 +18,7 @@ int main() {
     for(int i = 0; i < a.size(); i++){
         for(int j = 0; j < a.size(); j++){
             vector<int> temp;
-            if(i == j{
+            if(i == j){
                 if(a[i] > maximus){
                     maximus = a[i];
                 }
@@ -46,5 +46,5 @@ int main() {
             }
         }
     }
-    return maximus;
+    cout << maximus << "\n";
 }
