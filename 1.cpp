@@ -5,24 +5,27 @@ vector<int> dijkstra(vector<vector<pair<int, int>>> adjacency_list, int s) {
     vector<int> visited(adjacency_list.size(), 0);
     vector<int> distances(adjacency_list.size(), INT_MAX);
     distances[s] = 0;
-    priority_queue<pair<int, int>> pq;
-    pq.push(make_pair(s, 0));
-    while(pq.size() != 0){
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq; // min-heap
+    pq.push(make_pair(0, s)); // pushing pair of (distance, vertex)
+    while(!pq.empty()) {
         pair<int, int> p = pq.top();
-        auto [a, b] = p;
+        pq.pop();
+        int a = p.second; // vertex
+        int b = p.first; // distance
         visited[a] = 1;
-        if(distances[a] < b){
+        if(distances[a] < b) {
             continue;
         }
-        for(int i = 0; i < adjacency_list[a].size(); i++){
-            auto [x, y] = adjacency_list[a][i];
-            if(visited[x]){
+        for(int i = 0; i < adjacency_list[a].size(); i++) {
+            int x = adjacency_list[a][i].first; // adjacent vertex
+            int y = adjacency_list[a][i].second; // edge weight
+            if(visited[x]) {
                 continue;
             }
             int newDistance = distances[a] + y;
-            if(newDistance < distances[x]){
+            if(newDistance < distances[x]) {
                 distances[x] = newDistance;
-                pq.push(make_pair(x, newDistance));
+                pq.push(make_pair(newDistance, x));
             }
         }
     }
@@ -30,7 +33,7 @@ vector<int> dijkstra(vector<vector<pair<int, int>>> adjacency_list, int s) {
 }
 
 int main() {
-    int n, e;
+    int n, e; cin >> n >> e;
     int m = -1;
     vector<vector<pair<int, int>>> adjacency_list;
     for(int i = 0; i <= n; i++){
@@ -44,7 +47,11 @@ int main() {
     }
     for(int i = 1; i <= n; i++){
         vector<int> d = dijkstra(adjacency_list, i);
-        m = max(*max_element(d.begin(), d.end()), m);
+        for(int j = 0; j < d.size(); j++){
+            if(d[j] != INT_MAX && d[j] > m){
+                m = d[j];
+            }
+        }
     }
     cout << m << "\n";
 }
